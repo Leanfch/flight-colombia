@@ -438,6 +438,47 @@
       50% { opacity: 0.3; }
     }
 
+    /* DONE STATE */
+    .flight-card {
+      transition: border-color 0.2s, transform 0.2s, opacity 0.4s, filter 0.4s;
+    }
+
+    .flight-card.flight-done {
+      opacity: 0.22;
+      filter: grayscale(1);
+    }
+
+    .layover.layover-done {
+      opacity: 0.22;
+      filter: grayscale(1);
+      transition: opacity 0.4s, filter 0.4s;
+    }
+
+    .done-btn {
+      font-size: 10px;
+      padding: 0 14px;
+      height: 30px;
+      border-radius: 100px;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid rgba(100,116,139,0.4);
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      flex-shrink: 0;
+    }
+
+    .flight-done .done-btn {
+      background: rgba(16,185,129,0.15);
+      color: var(--accent3);
+      border-color: rgba(16,185,129,0.3);
+    }
+
     /* Responsive */
     @media (max-width: 580px) {
       .route-row { grid-template-columns: 1fr auto 1fr; gap: 8px; padding: 16px; }
@@ -494,11 +535,11 @@
   </div>
 
   <!-- VUELO 1: AEP → LIM (JA7801) -->
-  <div class="flight-card">
+  <div class="flight-card" id="flight-ja7801">
     <div class="airline-strip" style="background:rgba(30,100,200,0.15); color:#93c5fd; border-bottom:1px solid rgba(30,100,200,0.25);">
       <span>JetSMART Airlines</span>
       <span class="flight-num">JA 7801</span>
-      <span class="status-chip">Confirmado</span>
+      <button class="done-btn" onclick="toggleDone('flight-ja7801')">Completado</button>
     </div>
     <div class="route-row">
       <div class="airport">
@@ -552,11 +593,11 @@
   </div>
 
   <!-- VUELO 2: LIM → MDE (JA7752) -->
-  <div class="flight-card">
+  <div class="flight-card" id="flight-ja7752">
     <div class="airline-strip" style="background:rgba(30,100,200,0.15); color:#93c5fd; border-bottom:1px solid rgba(30,100,200,0.25);">
       <span>JetSMART Airlines</span>
       <span class="flight-num">JA 7752</span>
-      <span class="status-chip">Confirmado</span>
+      <button class="done-btn" onclick="toggleDone('flight-ja7752')">Completado</button>
     </div>
     <div class="route-row">
       <div class="airport">
@@ -610,11 +651,11 @@
   </div>
 
   <!-- VUELO 3: MDE → BOG (JA5117) -->
-  <div class="flight-card">
+  <div class="flight-card" id="flight-ja5117">
     <div class="airline-strip" style="background:rgba(30,100,200,0.15); color:#93c5fd; border-bottom:1px solid rgba(30,100,200,0.25);">
       <span>JetSMART Airlines</span>
       <span class="flight-num">JA 5117</span>
-      <span class="status-chip">Confirmado</span>
+      <button class="done-btn" onclick="toggleDone('flight-ja5117')">Completado</button>
     </div>
     <div class="route-row">
       <div class="airport">
@@ -668,11 +709,11 @@
   </div>
 
   <!-- VUELO 4: BOG → SMR (JA5176) -->
-  <div class="flight-card">
+  <div class="flight-card" id="flight-ja5176">
     <div class="airline-strip" style="background:rgba(30,100,200,0.15); color:#93c5fd; border-bottom:1px solid rgba(30,100,200,0.25);">
       <span>JetSMART Airlines</span>
       <span class="flight-num">JA 5176</span>
-      <span class="status-chip">Confirmado</span>
+      <button class="done-btn" onclick="toggleDone('flight-ja5176')">Completado</button>
     </div>
     <div class="route-row">
       <div class="airport">
@@ -742,11 +783,11 @@
   </div>
 
   <!-- VUELO 1 VUELTA: CTG → LIM (LA2391) -->
-  <div class="flight-card">
+  <div class="flight-card" id="flight-la2391">
     <div class="airline-strip latam">
       <span>LATAM Airlines Perú</span>
       <span class="flight-num">LA 2391</span>
-      <span class="status-chip">Confirmado</span>
+      <button class="done-btn" onclick="toggleDone('flight-la2391')">Completado</button>
     </div>
     <div class="route-row">
       <div class="airport">
@@ -800,11 +841,11 @@
   </div>
 
   <!-- VUELO 2 VUELTA: LIM → SCL (LA2377) -->
-  <div class="flight-card">
+  <div class="flight-card" id="flight-la2377">
     <div class="airline-strip latam">
       <span>LATAM Airlines Perú</span>
       <span class="flight-num">LA 2377</span>
-      <span class="status-chip">Confirmado</span>
+      <button class="done-btn" onclick="toggleDone('flight-la2377')">Completado</button>
     </div>
     <div class="route-row">
       <div class="airport">
@@ -858,11 +899,11 @@
   </div>
 
   <!-- VUELO 3 VUELTA: SCL → EZE (LA542) -->
-  <div class="flight-card">
+  <div class="flight-card" id="flight-la542">
     <div class="airline-strip latam">
       <span>LATAM Airlines Group</span>
       <span class="flight-num">LA 542</span>
-      <span class="status-chip">Confirmado</span>
+      <button class="done-btn" onclick="toggleDone('flight-la542')">Completado</button>
     </div>
     <div class="route-row">
       <div class="airport">
@@ -943,5 +984,46 @@
   </footer>
 
 </div>
+<script>
+  function toggleDone(id) {
+    const card = document.getElementById(id);
+    if (!card) return;
+    const isDone = card.classList.toggle('flight-done');
+    const btn = card.querySelector('.done-btn');
+    if (btn) btn.textContent = isDone ? '✓ Completado' : 'Completado';
+
+    // Atenuar también la escala/conector que sigue al vuelo
+    const next = card.nextElementSibling;
+    if (next && next.classList.contains('layover')) {
+      next.classList.toggle('layover-done', isDone);
+    }
+
+    // Persistir en localStorage
+    const done = JSON.parse(localStorage.getItem('doneFlights') || '[]');
+    if (isDone) {
+      if (!done.includes(id)) done.push(id);
+    } else {
+      const idx = done.indexOf(id);
+      if (idx > -1) done.splice(idx, 1);
+    }
+    localStorage.setItem('doneFlights', JSON.stringify(done));
+  }
+
+  // Restaurar estado al cargar
+  document.addEventListener('DOMContentLoaded', () => {
+    const done = JSON.parse(localStorage.getItem('doneFlights') || '[]');
+    done.forEach(id => {
+      const card = document.getElementById(id);
+      if (!card) return;
+      card.classList.add('flight-done');
+      const btn = card.querySelector('.done-btn');
+      if (btn) btn.textContent = '✓ Completado';
+      const next = card.nextElementSibling;
+      if (next && next.classList.contains('layover')) {
+        next.classList.add('layover-done');
+      }
+    });
+  });
+</script>
 </body>
 </html>
